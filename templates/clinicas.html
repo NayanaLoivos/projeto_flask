@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+{% block content %}
+    <table class="table table-striped table-responsive table-bordered">
+        <thead class="thead-default">
+        <tr>
+            <th>Nome</th>
+            <th>endereço</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for unidade in unidades %}
+        <tr>
+            <td>{{ unidade.name }}</td>
+            <td>{{ unidade.street }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
