@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 class Unidade:
     def __init__(self, name, street):
@@ -9,6 +9,7 @@ unidade1 = Unidade('Pantanal', 'Rua...-MS')
 lista = [unidade1]
 
 app = Flask(__name__) #__name__ faz referência ao próprio arquivo
+app.secret_key = 'goofy'
 @app.route('/') #quando criamos uma nova rota, precisamos de uma função que crie uma nova rota.
 def ola():
     return render_template('clinicas.html', titulo="Unidades", unidades=lista)
@@ -25,6 +26,19 @@ def create():
     lista.append(unidade)
     return redirect('/')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/autenticar', methods=['POST'])
+def autenticar():
+    if '123456' == request.form['senha']:
+        session['usuario_logado'] = request.form['usuario']
+        flash(session['usuario_logado'] + 'logado com sucesso!')
+        return redirect('/')
+    else:
+        flash('Login ou senha inválidos!!!')
+        return redirect('/login')
 app.run(debug=True) #aqui eu poderia definir (host='0.0.0.0', port=8080), mas não levar essas configurações para produção.
 
 
