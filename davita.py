@@ -18,7 +18,7 @@ def ola():
 def newClinica():
     return render_template('new-clinica.html', titulo='Nova unidade Davita')
 
-@app.route('/create', methods=['POST'])
+@app.route('/create', methods=['POST',])
 def create():
     name = request.form['name']
     street = request.form['street']
@@ -30,16 +30,22 @@ def create():
 def login():
     return render_template('login.html')
 
-@app.route('/autenticar', methods=['POST'])
+@app.route('/autenticar', methods=['POST',])
 def autenticar():
     if '123456' == request.form['senha']:
         session['usuario_logado'] = request.form['usuario']
         flash(session['usuario_logado'] + 'logado com sucesso!')
         return redirect('/')
     else:
+        session['usuario_logado'] = None
         flash('Login ou senha inválidos!!!')
         return redirect('/login')
-app.run(debug=True) #aqui eu poderia definir (host='0.0.0.0', port=8080), mas não levar essas configurações para produção.
 
+@app.route('/logout')
+def logout():
+    flash('Usuário deslogado!')
+    return redirect('/login')
+
+app.run(debug=True) #aqui eu poderia definir (host='0.0.0.0', port=8080), mas não levar essas configurações para produção.
 
 app.run()
