@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, session, flash
-
 class Unidade:
     def __init__(self, name, street):
         self.name = name
@@ -16,6 +15,9 @@ def ola():
 
 @app.route('/new-unidade')
 def newClinica():
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect('/login')
+
     return render_template('new-clinica.html', titulo='Nova unidade Davita')
 
 @app.route('/create', methods=['POST',])
@@ -40,9 +42,9 @@ def autenticar():
         session['usuario_logado'] = None
         flash('Login ou senha inválidos!!!')
         return redirect('/login')
-
 @app.route('/logout')
 def logout():
+    session['usuario_logado'] = None
     flash('Usuário deslogado!')
     return redirect('/login')
 
