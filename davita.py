@@ -16,8 +16,7 @@ def ola():
 @app.route('/new-unidade')
 def newClinica():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
-        return redirect('/login')
-
+        return redirect('/login?proxima=new-unidade')
     return render_template('new-clinica.html', titulo='Nova unidade Davita')
 
 @app.route('/create', methods=['POST',])
@@ -30,14 +29,16 @@ def create():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    proxima = request.args.get('proxima')
+    return render_template('login.html', proxima=proxima)
 
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
     if '123456' == request.form['senha']:
         session['usuario_logado'] = request.form['usuario']
         flash(session['usuario_logado'] + 'logado com sucesso!')
-        return redirect('/')
+        proxima_pagina = request.form['proxima']
+        return redirect('/{}'.format(proxima_pagina))
     else:
         session['usuario_logado'] = None
         flash('Login ou senha inválidos!!!')
